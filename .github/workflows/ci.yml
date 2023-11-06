@@ -215,7 +215,6 @@ jobs:
 
       - name: Login to Github Container Registry
         uses: docker/login-action@v1
-        if: env.GITHUB_TOKEN != ''
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -272,7 +271,7 @@ jobs:
         run: make publish BRANCH_NAME=${GITHUB_REF##*/}
 
       - name: Promote Artifacts to Github Container Registry
-        if: github.ref == 'refs/heads/master' && env.GITHUB_TOKEN != ''
+        if: github.ref == 'refs/heads/master'
         run: make -j2 promote
         env:
           BRANCH_NAME: master
