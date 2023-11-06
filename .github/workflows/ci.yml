@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Detect No-op Changes
         id: noop
-        uses: fkirc/skip-duplicate-actions@v5.2.0
+        uses: fairmoney/skip-duplicate-actions@v5.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           paths_ignore: '["**.md", "**.png", "**.jpg"]'
@@ -74,7 +74,7 @@ jobs:
       # We could run 'make lint' but we prefer this action because it leaves
       # 'annotations' (i.e. it comments on PRs to point out linter violations).
       - name: Lint
-        uses: golangci/golangci-lint-action@v3
+        uses: fairmoney/golangci-lint-action@pre-node-20
         with:
           version: ${{ env.GOLANGCI_VERSION }}
 
