@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - release-*
+      - lg/*
   pull_request: {}
   workflow_dispatch: {}
 
@@ -17,7 +18,6 @@ env:
   # step 'if env.XXX' != ""', so we copy these to succinctly test whether
   # credentials have been provided before trying to run steps that need them.
   UPBOUND_MARKETPLACE_PUSH_ROBOT_USR: ${{ secrets.UPBOUND_MARKETPLACE_PUSH_ROBOT_USR }}
-  DOCKER_USR: ${{ secrets.DOCKER_USR }}
 
 jobs:
   detect-noop:
