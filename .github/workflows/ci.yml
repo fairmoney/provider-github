@@ -125,6 +125,26 @@ jobs:
         if: failure() && steps.check-diff.outcome == 'failure'
         run: git diff
 
+  trivy-scan-fs:
+    runs-on: ubuntu-22.04
+    needs: detect-noop
+    if: needs.detect-noop.outputs.noop != 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Run Trivy vulnerability scanner in fs mode
+        uses: aquasecurity/trivy-action@fbd16365eb88e12433951383f5e99bd901fc618f # 0.12.0
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          skip-dirs: design
+          scan-ref: '.'
+          exit-code: '1'
+          severity: 'CRITICAL,HIGH'
+
   unit-tests:
     runs-on: ubuntu-22.04
     needs: detect-noop
@@ -177,6 +197,8 @@ jobs:
   publish-artifacts:
     runs-on: ubuntu-22.04
     needs: detect-noop
+    permissions:
+      packages: write
     if: needs.detect-noop.outputs.noop != 'true'
 
     steps:
@@ -191,12 +213,13 @@ jobs:
           version: ${{ env.DOCKER_BUILDX_VERSION }}
           install: true
 
-      - name: Login to Docker
+      - name: Login to Github Container Registry
         uses: docker/login-action@v1
-        if: env.DOCKER_USR != ''
+        if: env.GITHUB_TOKEN != ''
         with:
-          username: ${{ secrets.DOCKER_USR }}
-          password: ${{ secrets.DOCKER_PSW }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -247,3 +270,11 @@ jobs:
 
       - name: Publish Artifacts
         run: make publish BRANCH_NAME=${GITHUB_REF##*/}
+
+      - name: Promote Artifacts to Github Container Registry
+        if: github.ref == 'refs/heads/master' && env.GITHUB_TOKEN != ''
+        run: make -j2 promote
+        env:
+          BRANCH_NAME: master
+          CHANNEL: master
+
