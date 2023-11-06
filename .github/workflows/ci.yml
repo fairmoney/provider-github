@@ -268,7 +268,7 @@ jobs:
           path: _output/**
 
       - name: Publish Artifacts
-        run: make publish BRANCH_NAME=${GITHUB_REF##*/} --debug
+        run: make publish BRANCH_NAME=${GITHUB_REF##*/}
 
       - name: Promote Artifacts to Github Container Registry
         if: github.ref == 'refs/heads/master'
