@@ -17,6 +17,7 @@
 package util
 
 import (
+	"reflect"
 	"sort"
 )
 
@@ -79,4 +80,28 @@ func Contains(slice []string, str string) bool {
 		}
 	}
 	return false
+}
+
+func DiffRepoWebhooks(a, b map[string]map[string]interface{}) (map[string]map[string]interface{}, map[string]map[string]interface{}, map[string]map[string]interface{}) {
+	inANotInB := make(map[string]map[string]interface{})
+	inBNotInA := make(map[string]map[string]interface{})
+	diffs := make(map[string]map[string]interface{})
+
+	for entity, va := range a {
+		vb, ok := b[entity]
+		if !ok {
+			inANotInB[entity] = va
+		} else if !reflect.DeepEqual(va, vb) {
+			diffs[entity] = vb
+		}
+	}
+
+	for entity, vb := range b {
+		_, ok := a[entity]
+		if !ok {
+			inBNotInA[entity] = vb
+		}
+	}
+
+	return inANotInB, inBNotInA, diffs
 }

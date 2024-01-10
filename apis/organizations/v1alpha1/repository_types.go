@@ -30,6 +30,8 @@ type RepositoryParameters struct {
 	Description string                `json:"description,omitempty"`
 	Permissions RepositoryPermissions `json:"permissions,omitempty"`
 
+	Webhooks []RepositoryWebhook `json:"webhooks,omitempty"`
+
 	// Org is the Organization for the Membership
 	// +immutable
 	// +crossplane:generate:reference:type=Organization
@@ -92,6 +94,19 @@ type RepositoryTeam struct {
 
 	// Role is the role of the team
 	Role string `json:"role"`
+}
+
+// Repository webhook
+// https://docs.github.com/en/webhooks/types-of-webhooks#repository-webhooks
+type RepositoryWebhook struct {
+	// The URL to which the payloads will be delivered.
+	Url string `json:"url"`
+
+	// The media type used to serialize the payloads. Supported values include json and form.
+	ContentType string `json:"contentType"`
+
+	// Determines what events the hook is triggered for. See https://docs.github.com/en/webhooks/webhook-events-and-payloads
+	Events []string `json:"events"`
 }
 
 // RepositoryObservation are the observable fields of a Repository.
