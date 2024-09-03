@@ -163,6 +163,12 @@ func (c *external) Observe(ctx context.Context, mg resource.Managed) (managed.Ex
 	}
 
 	if !reflect.DeepEqual(util.SortByKey(ghMToPermission), util.SortByKey(crMToPermission)) {
+		fmt.Println("XXXXXXXXXXXXXXXXXXXXXXXXX")
+		fmt.Printf("Repo: %v\n", name)
+		fmt.Printf("CR collaborators: %v\n", crMToPermission)
+		fmt.Printf("Repo collaborators: %v\n", ghMToPermission)
+		fmt.Printf("Differences:\n%v", cmp.Diff(ghMToPermission, crMToPermission))
+		fmt.Println("XXXXXXXXXXXXXXXXXXXXXXXXX")
 		return notUpToDate, nil
 	}
 
@@ -173,6 +179,12 @@ func (c *external) Observe(ctx context.Context, mg resource.Managed) (managed.Ex
 	}
 
 	if !reflect.DeepEqual(util.SortByKey(ghTToPermission), util.SortByKey(crTToPermission)) {
+		fmt.Println("XXXXXXXXXXXXXXXXXXXXXXXXX")
+		fmt.Printf("Repo: %v\n", name)
+		fmt.Printf("CR team collaborators: %v\n", crTToPermission)
+		fmt.Printf("Repo team collaborators: %v\n", ghTToPermission)
+		fmt.Printf("Differences:\n%v", cmp.Diff(ghTToPermission, crTToPermission))
+		fmt.Println("XXXXXXXXXXXXXXXXXXXXXXXXX")
 		return notUpToDate, nil
 	}
 
@@ -935,6 +947,12 @@ func updateRepoUsers(ctx context.Context, cr *v1alpha1.Repository, gh *ghclient.
 	}
 
 	toDelete, toAdd, toUpdate := util.DiffPermissions(ghUToPermission, crMToPermission)
+	fmt.Println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+	fmt.Printf("Repo: %v\n", repoName)
+	fmt.Printf("Users toDelete: %v\n", toDelete)
+	fmt.Printf("Users toAdd: %v\n", toAdd)
+	fmt.Printf("Users toUpdate: %v\n", toUpdate)
+	fmt.Println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 
 	for userName := range toDelete {
 		_, err := gh.Repositories.RemoveCollaborator(ctx, cr.Spec.ForProvider.Org, repoName, userName)
@@ -962,6 +980,12 @@ func updateRepoTeams(ctx context.Context, cr *v1alpha1.Repository, gh *ghclient.
 	}
 
 	toDelete, toAdd, toUpdate := util.DiffPermissions(ghTToPermission, crTToPermission)
+	fmt.Println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+	fmt.Printf("Repo: %v\n", repoName)
+	fmt.Printf("Teams toDelete: %v\n", toDelete)
+	fmt.Printf("Teams toAdd: %v\n", toAdd)
+	fmt.Printf("Teams toUpdate: %v\n", toUpdate)
+	fmt.Println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
 
 	for teamSlug := range toDelete {
 		_, err := gh.Teams.RemoveTeamRepoBySlug(ctx, cr.Spec.ForProvider.Org, teamSlug, cr.Spec.ForProvider.Org, repoName)
