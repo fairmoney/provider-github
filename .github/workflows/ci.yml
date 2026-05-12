@@ -10,7 +10,7 @@ on:
 
 env:
   # Common versions
-  GO_VERSION: '1.23'
+  GO_VERSION: '1.24'
   GOLANGCI_VERSION: 'v2.4.0'
   DOCKER_BUILDX_VERSION: 'v0.9.1'
 
@@ -136,7 +136,7 @@ jobs:
           submodules: true
 
       - name: Run Trivy vulnerability scanner in fs mode
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: 'fs'
           ignore-unfixed: true
