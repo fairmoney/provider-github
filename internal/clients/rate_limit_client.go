@@ -259,6 +259,138 @@ func (rrc *RateLimitRepositoriesClient) Delete(ctx context.Context, owner, repo 
 	return resp, err
 }
 
+func (rrc *RateLimitRepositoriesClient) ListTeams(ctx context.Context, owner, repo string, opts *github.ListOptions) ([]*github.Team, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.ListTeams", func() ([]*github.Team, *github.Response, error) {
+		return rrc.RepositoriesClient.ListTeams(ctx, owner, repo, opts)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) ListCollaborators(ctx context.Context, owner, repo string, opts *github.ListCollaboratorsOptions) ([]*github.User, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.ListCollaborators", func() ([]*github.User, *github.Response, error) {
+		return rrc.RepositoriesClient.ListCollaborators(ctx, owner, repo, opts)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) CreateFromTemplate(ctx context.Context, templateOwner, templateRepo string, templateRepoReq *github.TemplateRepoRequest) (*github.Repository, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.CreateFromTemplate", func() (*github.Repository, *github.Response, error) {
+		return rrc.RepositoriesClient.CreateFromTemplate(ctx, templateOwner, templateRepo, templateRepoReq)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) CreateFork(ctx context.Context, owner, repo string, opts *github.RepositoryCreateForkOptions) (*github.Repository, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.CreateFork", func() (*github.Repository, *github.Response, error) {
+		return rrc.RepositoriesClient.CreateFork(ctx, owner, repo, opts)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) AddCollaborator(ctx context.Context, owner, repo, user string, opts *github.RepositoryAddCollaboratorOptions) (*github.CollaboratorInvitation, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.AddCollaborator", func() (*github.CollaboratorInvitation, *github.Response, error) {
+		return rrc.RepositoriesClient.AddCollaborator(ctx, owner, repo, user, opts)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) RemoveCollaborator(ctx context.Context, owner, repo, user string) (*github.Response, error) {
+	resp, err := rrc.RepositoriesClient.RemoveCollaborator(ctx, owner, repo, user)
+	recordResponse(rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.RemoveCollaborator", resp, err)
+	return resp, err
+}
+
+func (rrc *RateLimitRepositoriesClient) CreateHook(ctx context.Context, owner, repo string, hook *github.Hook) (*github.Hook, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.CreateHook", func() (*github.Hook, *github.Response, error) {
+		return rrc.RepositoriesClient.CreateHook(ctx, owner, repo, hook)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) EditHook(ctx context.Context, owner, repo string, id int64, hook *github.Hook) (*github.Hook, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.EditHook", func() (*github.Hook, *github.Response, error) {
+		return rrc.RepositoriesClient.EditHook(ctx, owner, repo, id, hook)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) DeleteHook(ctx context.Context, owner, repo string, id int64) (*github.Response, error) {
+	resp, err := rrc.RepositoriesClient.DeleteHook(ctx, owner, repo, id)
+	recordResponse(rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.DeleteHook", resp, err)
+	return resp, err
+}
+
+func (rrc *RateLimitRepositoriesClient) ListHooks(ctx context.Context, owner, repo string, opts *github.ListOptions) ([]*github.Hook, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.ListHooks", func() ([]*github.Hook, *github.Response, error) {
+		return rrc.RepositoriesClient.ListHooks(ctx, owner, repo, opts)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) ListBranches(ctx context.Context, owner, repo string, opts *github.BranchListOptions) ([]*github.Branch, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.ListBranches", func() ([]*github.Branch, *github.Response, error) {
+		return rrc.RepositoriesClient.ListBranches(ctx, owner, repo, opts)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) GetBranchProtection(ctx context.Context, owner, repo, branch string) (*github.Protection, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.GetBranchProtection", func() (*github.Protection, *github.Response, error) {
+		return rrc.RepositoriesClient.GetBranchProtection(ctx, owner, repo, branch)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) UpdateBranchProtection(ctx context.Context, owner, repo, branch string, preq *github.ProtectionRequest) (*github.Protection, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.UpdateBranchProtection", func() (*github.Protection, *github.Response, error) {
+		return rrc.RepositoriesClient.UpdateBranchProtection(ctx, owner, repo, branch, preq)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) RemoveBranchProtection(ctx context.Context, owner, repo, branch string) (*github.Response, error) {
+	resp, err := rrc.RepositoriesClient.RemoveBranchProtection(ctx, owner, repo, branch)
+	recordResponse(rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.RemoveBranchProtection", resp, err)
+	return resp, err
+}
+
+func (rrc *RateLimitRepositoriesClient) RequireSignaturesOnProtectedBranch(ctx context.Context, owner, repo, branch string) (*github.SignaturesProtectedBranch, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.RequireSignaturesOnProtectedBranch", func() (*github.SignaturesProtectedBranch, *github.Response, error) {
+		return rrc.RepositoriesClient.RequireSignaturesOnProtectedBranch(ctx, owner, repo, branch)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) OptionalSignaturesOnProtectedBranch(ctx context.Context, owner, repo, branch string) (*github.Response, error) {
+	resp, err := rrc.RepositoriesClient.OptionalSignaturesOnProtectedBranch(ctx, owner, repo, branch)
+	recordResponse(rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.OptionalSignaturesOnProtectedBranch", resp, err)
+	return resp, err
+}
+
+func (rrc *RateLimitRepositoriesClient) GetAllRulesets(ctx context.Context, owner, repo string, includesParents bool) ([]*github.Ruleset, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.GetAllRulesets", func() ([]*github.Ruleset, *github.Response, error) {
+		return rrc.RepositoriesClient.GetAllRulesets(ctx, owner, repo, includesParents)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) GetRuleset(ctx context.Context, owner, repo string, rulesetID int64, includesParents bool) (*github.Ruleset, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.GetRuleset", func() (*github.Ruleset, *github.Response, error) {
+		return rrc.RepositoriesClient.GetRuleset(ctx, owner, repo, rulesetID, includesParents)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) CreateRuleset(ctx context.Context, owner, repo string, ruleset *github.Ruleset) (*github.Ruleset, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.CreateRuleset", func() (*github.Ruleset, *github.Response, error) {
+		return rrc.RepositoriesClient.CreateRuleset(ctx, owner, repo, ruleset)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) UpdateRuleset(ctx context.Context, owner, repo string, rulesetID int64, ruleset *github.Ruleset) (*github.Ruleset, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.UpdateRuleset", func() (*github.Ruleset, *github.Response, error) {
+		return rrc.RepositoriesClient.UpdateRuleset(ctx, owner, repo, rulesetID, ruleset)
+	})
+}
+
+func (rrc *RateLimitRepositoriesClient) DeleteRuleset(ctx context.Context, owner, repo string, rulesetID int64) (*github.Response, error) {
+	resp, err := rrc.RepositoriesClient.DeleteRuleset(ctx, owner, repo, rulesetID)
+	recordResponse(rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.DeleteRuleset", resp, err)
+	return resp, err
+}
+
+func (rrc *RateLimitRepositoriesClient) ReplaceAllTopics(ctx context.Context, owner, repo string, topics []string) ([]string, *github.Response, error) {
+	return recordRateLimit(ctx, rrc.metrics, rrc.org, rrc.appID, rrc.installationID, rrc.cacheKey, "Repositories.ReplaceAllTopics", func() ([]string, *github.Response, error) {
+		return rrc.RepositoriesClient.ReplaceAllTopics(ctx, owner, repo, topics)
+	})
+}
+
 // RateLimitTeamsClient methods
 func (rtc *RateLimitTeamsClient) GetTeamBySlug(ctx context.Context, org, slug string) (*github.Team, *github.Response, error) {
 	return recordRateLimit(ctx, rtc.metrics, rtc.org, rtc.appID, rtc.installationID, rtc.cacheKey, "Teams.GetTeamBySlug", func() (*github.Team, *github.Response, error) {
@@ -281,6 +413,36 @@ func (rtc *RateLimitTeamsClient) EditTeamBySlug(ctx context.Context, org, slug s
 func (rtc *RateLimitTeamsClient) DeleteTeamBySlug(ctx context.Context, org, slug string) (*github.Response, error) {
 	resp, err := rtc.TeamsClient.DeleteTeamBySlug(ctx, org, slug)
 	recordResponse(rtc.metrics, rtc.org, rtc.appID, rtc.installationID, rtc.cacheKey, "Teams.DeleteTeamBySlug", resp, err)
+	return resp, err
+}
+
+func (rtc *RateLimitTeamsClient) ListTeamMembersBySlug(ctx context.Context, org, slug string, opts *github.TeamListTeamMembersOptions) ([]*github.User, *github.Response, error) {
+	return recordRateLimit(ctx, rtc.metrics, rtc.org, rtc.appID, rtc.installationID, rtc.cacheKey, "Teams.ListTeamMembersBySlug", func() ([]*github.User, *github.Response, error) {
+		return rtc.TeamsClient.ListTeamMembersBySlug(ctx, org, slug, opts)
+	})
+}
+
+func (rtc *RateLimitTeamsClient) AddTeamMembershipBySlug(ctx context.Context, org, slug, user string, opts *github.TeamAddTeamMembershipOptions) (*github.Membership, *github.Response, error) {
+	return recordRateLimit(ctx, rtc.metrics, rtc.org, rtc.appID, rtc.installationID, rtc.cacheKey, "Teams.AddTeamMembershipBySlug", func() (*github.Membership, *github.Response, error) {
+		return rtc.TeamsClient.AddTeamMembershipBySlug(ctx, org, slug, user, opts)
+	})
+}
+
+func (rtc *RateLimitTeamsClient) RemoveTeamMembershipBySlug(ctx context.Context, org, slug, user string) (*github.Response, error) {
+	resp, err := rtc.TeamsClient.RemoveTeamMembershipBySlug(ctx, org, slug, user)
+	recordResponse(rtc.metrics, rtc.org, rtc.appID, rtc.installationID, rtc.cacheKey, "Teams.RemoveTeamMembershipBySlug", resp, err)
+	return resp, err
+}
+
+func (rtc *RateLimitTeamsClient) AddTeamRepoBySlug(ctx context.Context, org, slug, owner, repo string, opts *github.TeamAddTeamRepoOptions) (*github.Response, error) {
+	resp, err := rtc.TeamsClient.AddTeamRepoBySlug(ctx, org, slug, owner, repo, opts)
+	recordResponse(rtc.metrics, rtc.org, rtc.appID, rtc.installationID, rtc.cacheKey, "Teams.AddTeamRepoBySlug", resp, err)
+	return resp, err
+}
+
+func (rtc *RateLimitTeamsClient) RemoveTeamRepoBySlug(ctx context.Context, org, slug, owner, repo string) (*github.Response, error) {
+	resp, err := rtc.TeamsClient.RemoveTeamRepoBySlug(ctx, org, slug, owner, repo)
+	recordResponse(rtc.metrics, rtc.org, rtc.appID, rtc.installationID, rtc.cacheKey, "Teams.RemoveTeamRepoBySlug", resp, err)
 	return resp, err
 }
 
