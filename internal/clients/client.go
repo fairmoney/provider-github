@@ -134,9 +134,6 @@ func NewClient(creds string) (*Client, error) {
 	}
 
 	ghclient := github.NewClient(&http.Client{Transport: itr})
-	if err != nil {
-		return nil, err
-	}
 
 	return &Client{
 		Actions:       ghclient.Actions,
